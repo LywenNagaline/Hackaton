@@ -4,9 +4,9 @@ const userRoutes = require("./routes/user");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
-const axios = require('axios')
+const axios = require('axios');
 const dotenv = require("dotenv");
-
+const moment = require('moment');
 const app = express();
 dotenv.config();
 
@@ -100,9 +100,10 @@ function ParseOffers(data) {
   results = [];
   for (let i = 0; i < data.resultats.length; i++) {
     resultat = data.resultats[i];
+    
     let d = {
       'title' : resultat.intitule,
-      'creationDate' : resultat.dateCreation,
+      'creationDate' : moment(resultat.dateCreation).format("DD/MM/YYYY"),
       'department' : resultat.lieuTravail.libelle,
       //'codepostal' : resultat.lieuTravail.codepostal,
       //'commune' : resultat.lieuTravail.commune,
