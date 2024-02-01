@@ -4,9 +4,9 @@ const userRoutes = require("./routes/user");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
-const axios = require('axios');
+const axios = require("axios");
 const dotenv = require("dotenv");
-const moment = require('moment');
+const moment = require("moment");
 const app = express();
 dotenv.config();
 
@@ -42,72 +42,102 @@ app.use((req, res, next) => {
 //app.use("/api/offer", offerRoutes);
 //app.use("/api/auth", userRoutes);
 
-
-ENV_FILE_PATH='backend/.env';
+ENV_FILE_PATH = "backend/.env";
 dotenv.config({ path: ENV_FILE_PATH });
 
-POLE_EMPLOI_ACCESS_TOKEN_URL = 'https://entreprise.pole-emploi.fr/connexion/oauth2/access_token?realm=/partenaire';
+POLE_EMPLOI_ACCESS_TOKEN_URL =
+  "https://entreprise.pole-emploi.fr/connexion/oauth2/access_token?realm=/partenaire";
 
 POLE_EMPLOI_ACCESS_TOKEN_URL_DATA = {
-  grant_type: 'client_credentials',
+  grant_type: "client_credentials",
   client_id: process.env.CLIENT_ID,
   client_secret: process.env.CLIENT_SECRET,
-  scope: 'api_offresdemploiv2 o2dsoffre'
+  scope: "api_offresdemploiv2 o2dsoffre",
 };
 
-POLE_EMPLOI_SEARCH_OFFERS_URL = 'https://api.pole-emploi.io/partenaire/offresdemploi/v2/offres/search';
+POLE_EMPLOI_SEARCH_OFFERS_URL =
+  "https://api.pole-emploi.io/partenaire/offresdemploi/v2/offres/search";
 //app.use("/api/offer", offerRoutes);
 //app.use("/api/auth", userRoutes);
 
 function GetPoleEmploiAPIHeaders(accessToken) {
-  return {'Authorization': 'Bearer ' + accessToken};
+  return { Authorization: "Bearer " + accessToken };
 }
 
 async function GetAccessToken() {
   let req = await axios({
-    method: 'post',
+    method: "post",
     url: POLE_EMPLOI_ACCESS_TOKEN_URL,
     data: POLE_EMPLOI_ACCESS_TOKEN_URL_DATA,
-    headers: {'content-type': 'application/x-www-form-urlencoded'}
+    headers: { "content-type": "application/x-www-form-urlencoded" },
   });
 
   let accessToken = req.data.access_token;
-  
+
   return accessToken;
 }
 
-async function GetOffers(offersCount=10, firstOfferIndex=0, departement=31) {
+async function GetOffers(
+  offersCount = 10,
+  firstOfferIndex = 0,
+  departement = 31
+) {
   let accessToken = await GetAccessToken();
 
-  let range = '0-9';
+  let range = "0-9";
   req = await axios({
-    method: 'get',
+    method: "get",
     params: {
       range: range,
-      departement: departement
+      departement: departement,
+      experience: "3",
     },
     url: POLE_EMPLOI_SEARCH_OFFERS_URL,
-    headers: GetPoleEmploiAPIHeaders(accessToken)
+    headers: GetPoleEmploiAPIHeaders(accessToken),
   });
 
   results = ParseOffers(req.data);
-  
+
   return results;
 }
 
+function getExperience(experience) {
+  const myRegex =
+    /([0-9]\smois)|([1-9]\sans?)|sénior|débutant|junior|expérimenté|Débutant/gm;
+  var resulatRegex = myRegex.exec(experience)[0];
+
+  if (resulatRegex.split(" ").length > 1) {
+    nombre = resulatRegex.split(" ")[0];
+    moisOuAns = resulatRegex.split(" ")[1];
+
+    if (moisOuAns === "mois") {
+      if (nombre <= 24) {
+        return "Débutant";
+      }
+      return "Expérimenté";
+    }
+    if (nombre <= 2) return "Débutant";
+    if (nombre > 2 && nombre < 5) return "Expérimenté";
+    if (nombre >= 5) return "Sénior";
+  }
+  return resulatRegex;
+}
+
 function ParseOffers(data) {
-  
   results = [];
   for (let i = 0; i < data.resultats.length; i++) {
     resultat = data.resultats[i];
-    
+
+    console.log("Experience avant traitement: " + resultat.experienceLibelle);
+    experience = getExperience(resultat.experienceLibelle);
+    console.log("Experience après traitement: " + experience);
+
     let d = {
-      'title' : resultat.intitule,
-      'creationDate' : moment(resultat.dateCreation).format("DD/MM/YYYY"),
-      'department' : resultat.lieuTravail.libelle,
-      //'codepostal' : resultat.lieuTravail.codepostal,
-      //'commune' : resultat.lieuTravail.commune,
-      'requiredExperience' : resultat.experienceLibelle,
+      title: resultat.intitule,
+      creationDate: moment(resultat.dateCreation).format("DD/MM/YYYY"),
+
+      department: resultat.lieuTravail.libelle,
+      requiredExperience: experience,
     };
     results.push(d);
   }
