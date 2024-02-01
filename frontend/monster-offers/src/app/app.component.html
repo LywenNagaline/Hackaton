@@ -1,34 +1,7 @@
 
 
 <main class="flex justify-center items-center w-full h-full">
-  <div *ngIf="color !== ''" class=" relative flex flex-col justify-stretch items-center w-3/4 h-3/4 border border-solid">
-    <div id="top" class="bg-red-200 w-full grow flex flex-row justify-center items-end" >
-      <img [src]="'../assets/body-parts/' + color + '/antennas/' + antennas[antennaRand] + '.png'" class="scale-x-[-1] translate-x-[-1.25rem]"/>
-      <img [src]="'../assets/body-parts/' + color + '/antennas/' + antennas[antennaRand] + '.png'" class=" translate-x-5" />
-    </div>
-    <div id="middle" class=" relative bg-green-200 w-full grow flex flex-row justify-center items-center" >
-      <img [src]="'../assets/body-parts/' + color + '/arms/' + arms[armRand] + '.png'" class="scale-x-[-1] rotate-[20deg] h-full" />
-
-      <img [src]="'../assets/body-parts/' + color + '/bodies/' + bodies[bodyRand] + '.png'" class=" h-full" />
-      <img [src]="'../assets/body-parts/' + color + '/arms/' + arms[armRand] + '.png'" class=" rotate-[-20deg] h-full" />
-      <div class=" absolute flex flex-col justify-center items-center top-[25%] left-[42%]">
-        <div id="face-top" class="flex flex-row justify-center items-center" >
-          <img [src]="'../assets/body-parts/' + color + '/eyes/' + eyes[eyeRand] + '.png'" />
-          <img [src]="'../assets/body-parts/' + color + '/eyes/' + eyes[eyeRand] + '.png'" />
-        </div>
-        <div id="face-middle" class="flex flex-row justify-center items-center" >
-          <img [src]="'../assets/body-parts/blue/noses/nose_brown.png'" />
-        </div>
-        <div id="face-low" class="flex flex-row justify-center items-center" >
-          <img [src]="'../assets/body-parts/default/mouths/'+ mouths[mouthRand] +'.png'" />
-        </div>
-      </div>
-    </div>
-    <div id="low" class=" bg-blue-200 w-full grow flex flex-row justify-center items-start" >
-      <img [src]="'../assets/body-parts/' + color + '/legs/' + legs[legRand] + '.png'" class="scale-x-[-1] translate-x-[-1.25rem]" />
-      <img [src]="'../assets/body-parts/' + color + '/legs/' + legs[legRand] + '.png'" class=" translate-x-5" />
-    </div>
-  </div>
+  
 </main>
 
 
