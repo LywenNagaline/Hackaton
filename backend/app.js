@@ -4,7 +4,7 @@ const userRoutes = require("./routes/user");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
-
+const axios = require('axios')
 const dotenv = require("dotenv");
 
 const app = express();
@@ -42,15 +42,80 @@ app.use((req, res, next) => {
 //app.use("/api/offer", offerRoutes);
 //app.use("/api/auth", userRoutes);
 
-app.get("/api/offer", (req, res, next) => {
-  const offer = [
-    {
-      _id: "oeihfzeoi",
-      title: "Titre de l'offre",
-      description: "Les infos de mon offre",
+
+ENV_FILE_PATH='backend/.env';
+dotenv.config({ path: ENV_FILE_PATH });
+
+POLE_EMPLOI_ACCESS_TOKEN_URL = 'https://entreprise.pole-emploi.fr/connexion/oauth2/access_token?realm=/partenaire';
+
+POLE_EMPLOI_ACCESS_TOKEN_URL_DATA = {
+  grant_type: 'client_credentials',
+  client_id: process.env.CLIENT_ID,
+  client_secret: process.env.CLIENT_SECRET,
+  scope: 'api_offresdemploiv2 o2dsoffre'
+};
+
+POLE_EMPLOI_SEARCH_OFFERS_URL = 'https://api.pole-emploi.io/partenaire/offresdemploi/v2/offres/search';
+//app.use("/api/offer", offerRoutes);
+//app.use("/api/auth", userRoutes);
+
+function GetPoleEmploiAPIHeaders(accessToken) {
+  return {'Authorization': 'Bearer ' + accessToken};
+}
+
+async function GetAccessToken() {
+  let req = await axios({
+    method: 'post',
+    url: POLE_EMPLOI_ACCESS_TOKEN_URL,
+    data: POLE_EMPLOI_ACCESS_TOKEN_URL_DATA,
+    headers: {'content-type': 'application/x-www-form-urlencoded'}
+  });
+
+  let accessToken = req.data.access_token;
+  
+  return accessToken;
+}
+
+async function GetOffers(offersCount=10, firstOfferIndex=0, departement=31) {
+  let accessToken = await GetAccessToken();
+
+  let range = '0-9';
+  req = await axios({
+    method: 'get',
+    params: {
+      range: range,
+      departement: departement
     },
-  ];
-  res.status(200).json(offer);
+    url: POLE_EMPLOI_SEARCH_OFFERS_URL,
+    headers: GetPoleEmploiAPIHeaders(accessToken)
+  });
+
+  results = ParseOffers(req.data);
+  
+  return results;
+}
+
+function ParseOffers(data) {
+  
+  results = [];
+  for (let i = 0; i < data.resultats.length; i++) {
+    resultat = data.resultats[i];
+    let d = {
+      'title' : resultat.intitule,
+      'creationDate' : resultat.dateCreation,
+      'department' : resultat.lieuTravail.libelle,
+      //'codepostal' : resultat.lieuTravail.codepostal,
+      //'commune' : resultat.lieuTravail.commune,
+      'requiredExperience' : resultat.experienceLibelle,
+    };
+    results.push(d);
+  }
+  return results;
+}
+
+app.get("/api/offer", async (req, res, next) => {
+  data = await GetOffers();
+  res.status(200).json(data);
 });
 
 module.exports = app;
