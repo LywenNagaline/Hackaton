@@ -12,7 +12,7 @@ export class JobOfferService {
   constructor(private http: HttpClient) {
   }
 
-  public getAnOffer(): Observable<JobOffer> {
-    return this.http.get<JobOffer>(environment.offerBackendHost);
+  public getJobOffers(): Observable<Array<JobOffer>> {
+    return this.http.get<Array<JobOffer>>(environment.offerBackendHost);
   }
 }
