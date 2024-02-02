@@ -6,6 +6,6 @@ import {AuthGuard} from "./core/guards/authorization.guard";
 
 export const routes: Routes = [
   {path: LOGIN_PATH, component: LoginComponent},
-  {path: "", redirectTo: LOGIN_PATH},
+  {path: "", redirectTo: LOGIN_PATH, pathMatch: "full"},
   {path: HOME_PATH, component: JobOfferComponent, canActivate : [AuthGuard]},
 ];
