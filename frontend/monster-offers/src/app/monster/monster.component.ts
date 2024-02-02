@@ -9,10 +9,9 @@ import { Component, Input, input } from '@angular/core';
   styleUrl: './monster.component.css'
 })
 export class MonsterComponent {
-  @Input() exp: string ='';
-  colors = new Map();
-  color = "";
-  test = "";
+  @Input() exp: string =''; // La valeur de l'expérience requise reçue depuis le composant parent
+  colors = new Map(); // On va associer chaque niveau d'expérience à une couleur
+  color = ""; // La couleur correspondant au niveau d'expérience indiqué sur l'offre
 
   antennas: string[] = [];
   antennaRand = 0;
@@ -50,14 +49,17 @@ export class MonsterComponent {
   mouthRand = 0;
 
   constructor() {
+    // On crée la map Expérience -> Couleur
     this.colors.set('Débutant', 'blue');
     this.colors.set('Expérimenté', 'yellow');
     this.colors.set('Sénior', 'green');
   }
 
   ngOnInit(){
-    //this.color = this.colors[Math.floor(Math.random()*3)];
+    // On récupère la couleur associée à l'expérience demandée dans l'annonce
     this.color = this.colors.get(this.exp);
+
+    // On initie les urls dynamiques des différentes parties du corps du monstre
     this.antennas = [
       `detail_${this.color}_antenna_large`, 
       `detail_${this.color}_antenna_small`
@@ -97,6 +99,8 @@ export class MonsterComponent {
     this.noses = [
       `nose_${this.color}`,
     ];
+
+    // On choisit de façon aléatoire une url pour chaque catégorie
     this.antennaRand = Math.floor(Math.random()*this.antennas.length);
     this.armRand = Math.floor(Math.random()*this.arms.length);
     this.bodyRand = Math.floor(Math.random()*this.bodies.length);
