@@ -5,6 +5,6 @@ const auth = require("../middlewares/auth");
 
 router.post("/signup", auth, userCtrl.signup);
 router.post("/login", auth, userCtrl.login);
-// ne pas oublier de rajouter auth dans les routes qui doivent être protégées
+//Les routes doivent d'abord passer par le système d'authentification avant de pouvoir se login ou s'inscire
 
 module.exports = router;

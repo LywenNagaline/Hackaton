@@ -7,6 +7,8 @@ const path = require("path");
 const axios = require("axios");
 const dotenv = require("dotenv");
 const moment = require("moment");
+const cors = require("cors");
+
 const app = express();
 dotenv.config();
 
@@ -22,6 +24,8 @@ mongoose
 
 app.use(express.json());
 // on utilise express.json pour transformer le corps de la requête en objet JS utilisable. Il est possible d'utiliser bodyparser mais il est inclus dans express depuis la version 4.16.0
+
+app.use(cors());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -39,9 +43,6 @@ app.use((req, res, next) => {
   next();
 });
 
-//app.use("/api/offer", offerRoutes);
-//app.use("/api/auth", userRoutes);
-
 ENV_FILE_PATH = "backend/.env";
 dotenv.config({ path: ENV_FILE_PATH });
 
@@ -57,8 +58,6 @@ POLE_EMPLOI_ACCESS_TOKEN_URL_DATA = {
 
 POLE_EMPLOI_SEARCH_OFFERS_URL =
   "https://api.pole-emploi.io/partenaire/offresdemploi/v2/offres/search";
-//app.use("/api/offer", offerRoutes);
-//app.use("/api/auth", userRoutes);
 
 function GetPoleEmploiAPIHeaders(accessToken) {
   return { Authorization: "Bearer " + accessToken };
@@ -90,7 +89,6 @@ async function GetOffers(
     params: {
       range: range,
       departement: departement,
-      experience: "2",
     },
     url: POLE_EMPLOI_SEARCH_OFFERS_URL,
     headers: GetPoleEmploiAPIHeaders(accessToken),
@@ -148,5 +146,7 @@ app.get("/api/offer", async (req, res, next) => {
   data = await GetOffers();
   res.status(200).json(data);
 });
+
+app.use("/api/auth", userRoutes);
 
 module.exports = app;
