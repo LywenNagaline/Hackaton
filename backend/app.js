@@ -90,7 +90,7 @@ async function GetOffers(
     params: {
       range: range,
       departement: departement,
-      experience: "3",
+      experience: "2",
     },
     url: POLE_EMPLOI_SEARCH_OFFERS_URL,
     headers: GetPoleEmploiAPIHeaders(accessToken),
@@ -116,8 +116,8 @@ function getExperience(experience) {
       }
       return "Expérimenté";
     }
-    if (nombre <= 2) return "Débutant";
-    if (nombre > 2 && nombre < 5) return "Expérimenté";
+    if (nombre < 2) return "Débutant";
+    if (nombre >= 2 && nombre < 5) return "Expérimenté";
     if (nombre >= 5) return "Sénior";
   }
   return resulatRegex;
