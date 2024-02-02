@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 
 @Component({
   selector: 'app-monster',
@@ -9,7 +9,8 @@ import { Component } from '@angular/core';
   styleUrl: './monster.component.css'
 })
 export class MonsterComponent {
-  colors = ['blue', 'green', 'yellow'];
+  @Input() exp: string ='';
+  colors = new Map();
   color = "";
   test = "";
 
@@ -48,8 +49,15 @@ export class MonsterComponent {
   ];
   mouthRand = 0;
 
+  constructor() {
+    this.colors.set('Débutant', 'blue');
+    this.colors.set('Expérimenté', 'yellow');
+    this.colors.set('Sénior', 'green');
+  }
+
   ngOnInit(){
-    this.color = this.colors[Math.floor(Math.random()*3)];
+    //this.color = this.colors[Math.floor(Math.random()*3)];
+    this.color = this.colors.get(this.exp);
     this.antennas = [
       `detail_${this.color}_antenna_large`, 
       `detail_${this.color}_antenna_small`
