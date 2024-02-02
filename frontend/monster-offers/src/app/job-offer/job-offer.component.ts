@@ -5,6 +5,7 @@ import {JobOffer} from "../core/models/job-offer.model";
 import {Subscription} from "rxjs";
 import {JobOfferService} from "../core/services/job-offer.service";
 import {MonsterComponent} from "../monster/monster.component";
+import {NavbarComponent} from "../navbar/navbar.component";
 
 @Component({
   selector: 'app-job-offer',
@@ -12,7 +13,8 @@ import {MonsterComponent} from "../monster/monster.component";
   imports: [
     CarouselModule,
     CardModule,
-    MonsterComponent
+    MonsterComponent,
+    NavbarComponent
   ],
   templateUrl: './job-offer.component.html',
   styleUrl: './job-offer.component.css'
