@@ -1,28 +1,28 @@
 <div class="container">
   <!-- Title -->
-  <h3>Se connecter</h3>
   <div class="container py-5 h-100">
     <div class="row d-flex align-items-center justify-content-center h-100">
+      <p class="fs-3 text-center fill-blue-600 mt-3">Se connecter</p>
       <div class="col-md-8 col-lg-7 col-xl-6">
         <img src="assets/logo.png" class="img-fluid">
       </div>
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-        <form>
+        <form [formGroup]="loginFormGroup" (ngSubmit)="handleLogin()">
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <input type="email" id="form1Example13" class="form-control form-control-lg" />
-            <label class="form-label" for="form1Example13">Email</label>
+            <input type="email" formControlName="email" class="form-control form-control-lg" />
+            <label class="form-label" >Email</label>
           </div>
 
           <!-- Password input -->
           <div class="form-outline mb-4">
-            <input type="password" id="form1Example23" class="form-control form-control-lg" />
-            <label class="form-label" for="form1Example23">Mot de passe</label>
+            <input type="password" formControlName="password" class="form-control form-control-lg" />
+            <label class="form-label">Mot de passe</label>
           </div>
 
           <!-- Submit button -->
+          <button class="btn btn-primary">Se connecter</button>
         </form>
-        <p-button label="Submit"></p-button>
       </div>
     </div>
   </div>
