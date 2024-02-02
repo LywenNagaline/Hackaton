@@ -32,6 +32,7 @@ export class MonsterComponent {
   legRand = 0;
 
   noses: string[] = [];
+  noseRand = 0;
 
   mouths = [
     'mouthA',
@@ -73,9 +74,10 @@ export class MonsterComponent {
       `detail_${this.color}_ear_round]`,
     ];
     this.eyes = [
-      `eye_angry_${this.color}`,
       `eye_${this.color}`,
-      `eye_human_${this.color}`,
+      'eye_dead',
+      'eye_closed_happy',
+      'eye_closed_feminine'
     ];
     this.legs = [
       `leg_${this.color}A`,
@@ -94,6 +96,7 @@ export class MonsterComponent {
     this.eyeRand = Math.floor(Math.random()*this.eyes.length);
     this.legRand = Math.floor(Math.random()*this.legs.length);
     this.mouthRand = Math.floor(Math.random()*this.mouths.length);
+    this.noseRand = Math.floor(Math.random()*this.noses.length);
 
     console.log(this.color);
   }
