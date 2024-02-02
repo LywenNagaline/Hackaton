@@ -1,13 +1,9 @@
 export interface JobOffer {
   id: number;
   title: string;
-  requiredExperience: ExperienceLevelType;
+  requiredExperience: string;
   creationDate: Date;
   department: string;
 }
 
-enum ExperienceLevelType {
-  BEGINNER,
-  EXPERIENCED,
-  SENIOR
-}
+

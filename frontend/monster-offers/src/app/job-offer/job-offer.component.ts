@@ -4,13 +4,15 @@ import {CardModule} from "primeng/card";
 import {JobOffer} from "../core/models/job-offer.model";
 import {Subscription} from "rxjs";
 import {JobOfferService} from "../core/services/job-offer.service";
+import {MonsterComponent} from "../monster/monster.component";
 
 @Component({
   selector: 'app-job-offer',
   standalone: true,
   imports: [
     CarouselModule,
-    CardModule
+    CardModule,
+    MonsterComponent
   ],
   templateUrl: './job-offer.component.html',
   styleUrl: './job-offer.component.css'
@@ -23,11 +25,11 @@ export class JobOfferComponent implements OnInit, OnDestroy{
   jobOffers: Array<JobOffer> = [];
   subscriptions: Subscription[] = []
   getJobOffersSubscription$!: Subscription;
-  errorMessage!: string;
 
 
   ngOnInit(): void {
     this.subscriptions.push(this.getJobOffersSubscription$);
+    this.getJobOffers();
 
   }
 
@@ -39,13 +41,12 @@ export class JobOfferComponent implements OnInit, OnDestroy{
     });
   }
 
-  getAnOffer(){
+  getJobOffers(){
     this.getJobOffersSubscription$ = this.jobOfferService.getJobOffers().subscribe({
       next : (data)=>{
         this.jobOffers = data;
       },
       error: (err)=>{
-        this.errorMessage = err.message;
         console.log(err);
       }
     });

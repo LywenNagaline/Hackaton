@@ -2,16 +2,20 @@
 <div class="container">
   <p-carousel [value]="jobOffers" [numVisible]="1" [numScroll]="1" [circular]="false" >
     <ng-template let-job pTemplate="item">
-      <div class="row">
-        <div class="col-md-8 mb-3 mt-3">
-          <p-card header="Monstre">
-            <p>TODO</p>
+      <div class="row justify-content-center">
+        <div class="col-md-6 mb-3 mt-3">
+          <p-card header="Monstre" >
+            <app-monster></app-monster>
           </p-card>
         </div>
-        <div class="col-6 col-md-4 mt-3">
-          <p-card header="Offre d'emploi">
-            <h4>{{ job.id }}</h4>
-            <h4>{{ job.title }}</h4>
+        <div class="col-8 col-md-4 mt-3">
+          <p-card header="Offre d'emploi" >
+            <div>
+              <p class="fs-5">{{ job.title }}</p>
+              <p class="fs-6"><i class="pi pi-map-marker"></i>{{ job.department }}</p>
+              <p>Experience requise : {{ job.requiredExperience }}</p>
+              <p>{{ job.creationDate }}</p>
+            </div>
           </p-card>
         </div>
       </div>

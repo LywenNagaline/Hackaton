@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import {NavbarComponent} from "./navbar/navbar.component";
 import {LoginComponent} from "./login/login.component";
 import {JobOfferComponent} from "./job-offer/job-offer.component";
+import {MonsterComponent} from "./monster/monster.component";
 
 @Component({
   selector: 'app-root',
